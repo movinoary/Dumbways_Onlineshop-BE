@@ -22,7 +22,6 @@ exports.getCategory = async (req, res) => {
     try {
         const data = await category.findAll();
 
-        // `SELECT name,email, status, id FROM`
         res.send({
             status: "success",
             data: {

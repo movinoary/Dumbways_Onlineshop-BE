@@ -1,4 +1,4 @@
-const {product} = require("../../models");
+const {product, category, user, categoryProduct} = require("../../models");
 
 exports.addProduct = async (req, res) => {
     try {
@@ -18,11 +18,36 @@ exports.addProduct = async (req, res) => {
 };
 
 exports.getProduct = async (req, res) => {
-    // code here
     try {
-        const products = await product.findAll();
+        const products = await product.findAll({
+            include: [
+                {
+                  model: user,
+                  as: "user",
+                  attributes: {
+                    exclude: ["createdAt", "updatedAt", "password"],
+                  },
+                },
+                {
+                  model: category,
+                  as: "category",
+                  through: {
+                    model: categoryProduct,
+                    as: "bridge",
+                    attributes: {
+                      exclude: ["createdAt", "updatedAt"],
+                    }
+                  },
+                  attributes: {
+                    exclude: ["createdAt", "updatedAt"],
+                  },
+                }
+              ],
+              attributes: {
+                exclude: ["createdAt", "updatedAt", "idUser"],
+              },
+            });
 
-        // `SELECT name,email, status, id FROM`
         res.send({
             status: "success",
             data: {

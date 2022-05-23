@@ -1,4 +1,4 @@
-const { transaction } = require("../../models");
+const { transaction, user, product } = require("../../models");
 
 exports.addTransaction = async (req, res) => {
     try {
@@ -20,9 +20,33 @@ exports.addTransaction = async (req, res) => {
 exports.getTransaction = async (req, res) => {
     // code here
     try {
-        const data = await transaction.findAll();
+        const data = await transaction.findAll({
+            include: [
+                {
+                    model: product,
+                    as: "product",
+                    exclude: ["createdAt", "updatedAt"],
+                },
+                {
+                  model: user,
+                  as: "buyer",
+                  attributes: {
+                    exclude: ["createdAt", "updatedAt", "password"],
+                  },
+                },
+                {
+                    model: user,
+                    as: "seller",
+                    attributes: {
+                      exclude: ["createdAt", "updatedAt", "password"],
+                    },
+                  },
+            ],
+            attributes: {
+                exclude: ["createdAt", "updatedAt", "idSaller", "idBuyer", "idProduct"],
+            },            
+        });
 
-        // `SELECT name,email, status, id FROM`
         res.send({
             status: "success",
             data: {

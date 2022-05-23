@@ -22,7 +22,6 @@ exports.getProfile = async (req, res) => {
     try {
         const data = await profile.findAll();
 
-        // `SELECT name,email, status, id FROM`
         res.send({
             status: "success",
             data: {
