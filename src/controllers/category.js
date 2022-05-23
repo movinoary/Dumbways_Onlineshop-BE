@@ -1,12 +1,12 @@
-const {product} = require("../../models");
+const {category} = require("../../models");
 
-exports.addProduct = async (req, res) => {
+exports.addCategory = async (req, res) => {
     try {
-        await product.create(req.body);
+        await category.create(req.body);
 
         res.send({
             status: 'success',
-            message: 'Add Product Success..'
+            message: 'Add Category Success..'
         })
     } catch (error) {
         console.log(error);
@@ -17,16 +17,16 @@ exports.addProduct = async (req, res) => {
     }
 };
 
-exports.getProduct = async (req, res) => {
+exports.getCategory = async (req, res) => {
     // code here
     try {
-        const products = await product.findAll();
+        const data = await category.findAll();
 
         // `SELECT name,email, status, id FROM`
         res.send({
             status: "success",
             data: {
-                products
+                data
             }
         });
     } catch (error) {
@@ -38,11 +38,11 @@ exports.getProduct = async (req, res) => {
     }
 };
 
-exports.getProductbyId = async (req, res) => {
+exports.getCategorybyId = async (req, res) => {
     try {
         const { id } = req.params
 
-        const data = await product.findOne({
+        const data = await category.findOne({
             where: {
                 id: id
             }
@@ -63,11 +63,11 @@ exports.getProductbyId = async (req, res) => {
     }
 };
 
-exports.updateProduct = async (req, res) => {
+exports.updateCategory = async (req, res) => {
     try {
         const { id } = req.params
 
-        await product.update(req.body, {
+        await category.update(req.body, {
             where: {
                 id
             }
@@ -87,11 +87,11 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-exports.deleteProduct = async (req, res) => {
+exports.deleteCategory = async (req, res) => {
     try {
         const { id } = req.params
 
-        await product.destroy({
+        await category.destroy({
             where: {
                 id
             }
