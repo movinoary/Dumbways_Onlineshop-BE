@@ -4,8 +4,12 @@ const { getProduct, addProduct, getProductbyId, updateProduct, deleteProduct } =
 const { getCategory, addCategory, getCategorybyId, updateCategory, deleteCategory } = require('../controllers/category');
 const { getProfile, addProfile, getProfilebyId, updateProfile, deleteProfile } = require('../controllers/profile');
 const { getTransaction, addTransaction, getTransactionbyId, updateTransaction, deleteTransaction } = require('../controllers/transaction');
+const { register } = require('../controllers/auth');
 
 const router = express.Router();
+
+// Router
+router.post('/register', register)
 
 // Router User
 router.get('/user', getUser);
@@ -41,6 +45,7 @@ router.post('/transaction', addTransaction);
 router.get('/transaction/:id', getTransactionbyId);
 router.patch('/transaction/:id', updateTransaction);
 router.delete('/transaction/:id', deleteTransaction);
+
 
 
 module.exports = router
