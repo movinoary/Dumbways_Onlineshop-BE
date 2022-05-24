@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
                 name: newUser.name,
                 email: newUser.email,
             }
-        })
+        });
 
     } catch (error) {
         res.status(500).send({
@@ -119,4 +119,8 @@ exports.login = async (req, res) => {
 
 exports.logout = async(req,res) => {
     res.cookie('jwt', '', {maxAge:1});
+    res.status(200).send({
+        status: "success",
+        message: "See You Later"
+    })
 }

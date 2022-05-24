@@ -12,7 +12,7 @@ const router = express.Router();
 // Router
 router.post('/register', register)
 router.post('/login', login)
-router.post('/logout', logout)
+router.delete('/logout', logout)
 
 // Router User
 router.get('/user',auth, getUser);
