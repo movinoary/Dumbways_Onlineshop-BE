@@ -4,23 +4,25 @@ const { getProduct, addProduct, getProductbyId, updateProduct, deleteProduct } =
 const { getCategory, addCategory, getCategorybyId, updateCategory, deleteCategory } = require('../controllers/category');
 const { getProfile, addProfile, getProfilebyId, updateProfile, deleteProfile } = require('../controllers/profile');
 const { getTransaction, addTransaction, getTransactionbyId, updateTransaction, deleteTransaction } = require('../controllers/transaction');
-const { register, login } = require('../controllers/auth');
+const { register, login, logout } = require('../controllers/auth');
+const { auth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Router
 router.post('/register', register)
 router.post('/login', login)
+router.post('/logout', logout)
 
 // Router User
-router.get('/user', getUser);
+router.get('/user',auth, getUser);
 router.post('/user', addUser);
 router.get('/user/:id', getUserbyId);
 router.patch('/user/:id', updateUser);
 router.delete('/user/:id', deleteUser);
 
 // Router Product
-router.get('/product', getProduct);
+router.get('/product',auth, getProduct);
 router.post('/product', addProduct);
 router.get('/product/:id', getProductbyId);
 router.patch('/product/:id', updateProduct);

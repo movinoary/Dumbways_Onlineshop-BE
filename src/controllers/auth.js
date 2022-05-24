@@ -1,6 +1,7 @@
 const { user } = require("../../models");
 const Joi = require("joi");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
 
 exports.register = async (req, res) => {
     try {
@@ -91,11 +92,19 @@ exports.login = async (req, res) => {
             })
         };
 
+        const dataToken = {
+            id: userExist.id
+        }
+
+        const SECRET_KEY = 'sangatrahasia'
+        const token = jwt.sign(dataToken, SECRET_KEY)
+
         res.status(200).send({
             status: "success",
             data: {
                 email: userExist.email,
                 password: userExist.password,
+                token
             }
         });
 
@@ -107,3 +116,7 @@ exports.login = async (req, res) => {
         });
     };
 };
+
+exports.logout = async(req,res) => {
+    res.cookie('jwt', '', {maxAge:1});
+}
