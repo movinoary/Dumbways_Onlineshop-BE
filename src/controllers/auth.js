@@ -1,6 +1,6 @@
 const { user } = require("../../models");
-
 const Joi = require("joi");
+const bcrypt = require("bcrypt")
 
 exports.register = async (req, res) => {
     try {
@@ -22,10 +22,13 @@ exports.register = async (req, res) => {
             })
         };
 
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(data.password, salt)
+
         const newUser = await user.create({
             name: data.name,
             email: data.email,
-            password: data.password,
+            password: hashedPassword,
             status: data.status
         });
         
@@ -38,9 +41,69 @@ exports.register = async (req, res) => {
         })
 
     } catch (error) {
-        res.send({
+        res.status(500).send({
             status: "failed",
             message: "Server Error"
-        })   
-    }
+        });  
+    };
+};
+
+exports.login = async (req, res) => {
+    const data = req.body;
+    
+    const schema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).required(),
+    });
+        
+    const {error} = schema.validate(data);
+
+    if(error){
+        return res.status(400).send({
+            status: "error",
+            message: error.details[0].message
+        })
+    };
+        
+    try {
+        const userExist = await user.findOne({
+            where: {
+                email: data.email
+            },
+            attributes: {
+                exclude: ["createdAt", "updatedAt"],
+            }
+        });
+        
+        if(!userExist){
+            return res.status(400).send({
+                status: "Failed",
+                message: "Data Not Found"
+            })
+        };
+
+        const isValid = await bcrypt.compare(data.password, userExist.password)
+
+        if(!isValid){
+            return res.status(400).send({
+                status: "Failed",
+                message: "Email and Password doesnt match"
+            })
+        };
+
+        res.status(200).send({
+            status: "success",
+            data: {
+                email: userExist.email,
+                password: userExist.password,
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            status: "failed",
+            message: "Server Error"
+        });
+    };
 };

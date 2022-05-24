@@ -4,12 +4,13 @@ const { getProduct, addProduct, getProductbyId, updateProduct, deleteProduct } =
 const { getCategory, addCategory, getCategorybyId, updateCategory, deleteCategory } = require('../controllers/category');
 const { getProfile, addProfile, getProfilebyId, updateProfile, deleteProfile } = require('../controllers/profile');
 const { getTransaction, addTransaction, getTransactionbyId, updateTransaction, deleteTransaction } = require('../controllers/transaction');
-const { register } = require('../controllers/auth');
+const { register, login } = require('../controllers/auth');
 
 const router = express.Router();
 
 // Router
 router.post('/register', register)
+router.post('/login', login)
 
 // Router User
 router.get('/user', getUser);
