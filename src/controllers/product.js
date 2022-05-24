@@ -9,7 +9,7 @@ exports.addProduct = async (req, res) => {
             image: req.file.filename,
             idUser: req.user.id
         });
-
+ 
         const categoryData = await category.findOne({
             where: {
                 name: categoryName,

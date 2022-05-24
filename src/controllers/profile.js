@@ -3,10 +3,27 @@ const {profile} = require("../../models");
 exports.addProfile = async (req, res) => {
     try {
         await profile.create(req.body);
+        const { ...data } = req.body;
 
+        const newProfile = await profile.create({
+            ...data,
+            image: req.file.filename,
+            idUser: req.user.id
+        });
+ 
+        let profileData = await profile.findOne({
+            where: {
+                id: newProfile.id 
+            }
+        });
+
+        profileData = JSON.parse(JSON.stringify(profileData));
         res.send({
-            status: 'success',
-            message: 'Add Profile Success..'
+            status: "Success",
+            data: {
+                ...profileData,
+                image: 'http://localhost:5000/public/profile/' + profileData.image
+            }
         })
     } catch (error) {
         console.log(error);
@@ -18,15 +35,23 @@ exports.addProfile = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    // code here
     try {
-        const data = await profile.findAll();
+        let data = await profile.findAll();
 
+        
+        let FILE_PATH = "http://localhost:5000/public/profile/"
+        data = JSON.parse(JSON.stringify(data));
+
+        data = data.map((item) => {
+            return {
+                ...item,
+                image: FILE_PATH + item.image
+            }
+        });
+        
         res.send({
             status: "success",
-            data: {
-                data
-            }
+            data,
         });
     } catch (error) {
         console.log(error)

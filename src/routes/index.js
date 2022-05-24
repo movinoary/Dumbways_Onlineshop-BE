@@ -4,7 +4,7 @@ const { getProduct, addProduct, getProductbyId, updateProduct, deleteProduct } =
 const { getCategory, addCategory, getCategorybyId, updateCategory, deleteCategory } = require('../controllers/category');
 const { getProfile, addProfile, getProfilebyId, updateProfile, deleteProfile } = require('../controllers/profile');
 const { getTransaction, addTransaction, getTransactionbyId, updateTransaction, deleteTransaction } = require('../controllers/transaction');
-const { uploadImgProfile } = require('../middleware/updaloadImage');
+const { uploadImgProfile, uploadImgProduct } = require('../middleware/updaloadImage');
 const { register, login, logout } = require('../controllers/auth');
 const { auth } = require('../middleware/auth');
 
@@ -24,7 +24,7 @@ router.delete('/user/:id', deleteUser);
 
 // Router Product
 router.get('/product',auth, getProduct);
-router.post('/product',auth, uploadImgProfile("image"), addProduct);
+router.post('/product',auth, uploadImgProduct("image"), addProduct);
 router.get('/product/:id', getProductbyId);
 router.patch('/product/:id', updateProduct);
 router.delete('/product/:id', deleteProduct);
@@ -38,7 +38,7 @@ router.delete('/category/:id', deleteCategory);
 
 // Router Profile
 router.get('/profile', getProfile);
-router.post('/profile', addProfile);
+router.post('/profile', auth, uploadImgProfile("image"), addProfile);
 router.get('/profile/:id', getProfilebyId);
 router.patch('/profile/:id', updateProfile);
 router.delete('/profile/:id', deleteProfile);
