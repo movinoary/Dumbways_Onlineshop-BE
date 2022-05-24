@@ -2,12 +2,74 @@ const {product, category, user, categoryProduct} = require("../../models");
 
 exports.addProduct = async (req, res) => {
     try {
-        await product.create(req.body);
+        const { category: categoryName, ...data } = req.body;
 
+        const newProduct = await product.create({
+            ...data,
+            image: req.file.filename,
+            idUser: req.user.id
+        });
+
+        const categoryData = await category.findOne({
+            where: {
+                name: categoryName,
+            }
+        });
+
+        if(categoryData){
+            await categoryProduct.create({
+                idCategory: categoryData.id,
+                idProduct: newProduct.id
+            })
+        } else {
+            const newCategory = await category.create({ name: categoryName });
+            await categoryProduct.create({
+                idCategory: newCategory.id,
+                idProduct: newProduct.id
+            })
+        }
+
+        let productData = await product.findOne({
+            where: {
+                id: newProduct.id 
+            },
+            include: [
+                {
+                  model: user,
+                  as: "user",
+                  attributes: {
+                    exclude: ["createdAt", "updatedAt", "password"],
+                  },
+                },
+                {
+                  model: category,
+                  as: "category",
+                  through: {
+                    model: categoryProduct,
+                    as: "bridge",
+                    attributes: {
+                      exclude: ["createdAt", "updatedAt"],
+                    }
+                  },
+                  attributes: {
+                    exclude: ["createdAt", "updatedAt"],
+                  },
+                }
+              ],
+              attributes: {
+                exclude: ["createdAt", "updatedAt", "idUser"],
+              },
+        });
+
+        productData = JSON.parse(JSON.stringify(productData));
         res.send({
-            status: 'success',
-            message: 'Add Product Success..'
+            status: "Success",
+            data: {
+                ...productData,
+                image: 'http://localhost:5000/public/product/' + productData.image
+            }
         })
+
     } catch (error) {
         console.log(error);
         res.send({
@@ -19,7 +81,7 @@ exports.addProduct = async (req, res) => {
 
 exports.getProduct = async (req, res) => {
     try {
-        const products = await product.findAll({
+        let data = await product.findAll({
             include: [
                 {
                   model: user,
@@ -48,11 +110,19 @@ exports.getProduct = async (req, res) => {
               },
             });
 
+        let FILE_PATH = "http://localhost:5000/public/product/"
+        data = JSON.parse(JSON.stringify(data));
+
+        data = data.map((item) => {
+            return {
+                ...item,
+                image: FILE_PATH + item.image
+            }
+        })
+
         res.send({
             status: "success",
-            data: {
-                products
-            }
+            data,
         });
     } catch (error) {
         console.log(error)

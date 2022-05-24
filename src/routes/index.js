@@ -4,6 +4,7 @@ const { getProduct, addProduct, getProductbyId, updateProduct, deleteProduct } =
 const { getCategory, addCategory, getCategorybyId, updateCategory, deleteCategory } = require('../controllers/category');
 const { getProfile, addProfile, getProfilebyId, updateProfile, deleteProfile } = require('../controllers/profile');
 const { getTransaction, addTransaction, getTransactionbyId, updateTransaction, deleteTransaction } = require('../controllers/transaction');
+const { uploadImgProfile } = require('../middleware/updaloadImage');
 const { register, login, logout } = require('../controllers/auth');
 const { auth } = require('../middleware/auth');
 
@@ -12,7 +13,7 @@ const router = express.Router();
 // Router
 router.post('/register', register)
 router.post('/login', login)
-router.delete('/logout', logout)
+router.post('/logout', logout)
 
 // Router User
 router.get('/user',auth, getUser);
@@ -23,7 +24,7 @@ router.delete('/user/:id', deleteUser);
 
 // Router Product
 router.get('/product',auth, getProduct);
-router.post('/product', addProduct);
+router.post('/product',auth, uploadImgProfile("image"), addProduct);
 router.get('/product/:id', getProductbyId);
 router.patch('/product/:id', updateProduct);
 router.delete('/product/:id', deleteProduct);
