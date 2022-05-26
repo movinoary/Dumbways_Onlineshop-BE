@@ -6,5 +6,5 @@ npx sequelize-cli model:generate --name user --attributes name:string,email:Stri
 // buat bikin database
 npx sequelize db:migrate
 
-// buat ngapus
+// buat ngapus semua
 npx sequelize db:migrate:undo:all
