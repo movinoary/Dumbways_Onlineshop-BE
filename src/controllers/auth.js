@@ -99,14 +99,25 @@ exports.login = async (req, res) => {
         const SECRET_KEY = 'sangatrahasia'
         const token = jwt.sign(dataToken, SECRET_KEY)
 
-        res.status(200).send({
-            status: "success",
-            data: {
-                email: userExist.email,
-                password: userExist.password,
-                token
-            }
-        });
+        if(userExist.status === "admin"){
+            res.status(200).send({
+                status: "welcome admin",
+                data: {
+                    email: userExist.email,
+                    password: userExist.password,
+                    token
+                }
+            });
+        } else if(userExist.status === "user"){
+            res.status(200).send({
+                status: "welcome user",
+                data: {
+                    email: userExist.email,
+                    password: userExist.password,
+                    token
+                }
+            });
+        }
 
     } catch (error) {
         console.log(error);
@@ -118,9 +129,16 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = async(req,res) => {
-    res.cookie('jwt', '', {maxAge:1});
-    res.status(200).send({
-        status: "success",
-        message: "See You Later"
-    })
+    try {
+        res.cookie('jwt', '', {maxAge:1});
+        res.status(200).send({
+            status: "success",
+            message: "See You Later"
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            status: "error"
+        })
+    }
 }

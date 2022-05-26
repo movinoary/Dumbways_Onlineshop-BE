@@ -13,42 +13,42 @@ const router = express.Router();
 // Router
 router.post('/register', register)
 router.post('/login', login)
-router.post('/logout', logout)
+router.delete('/logout', logout)
 
 // Router User
 router.get('/user',auth, getUser);
-router.post('/user', addUser);
 router.get('/user/:id', getUserbyId);
+router.post('/user', addUser);
 router.patch('/user/:id', updateUser);
 router.delete('/user/:id', deleteUser);
 
 // Router Product
-router.get('/product',auth, getProduct);
-router.post('/product',auth, uploadImgProduct("image"), addProduct);
+router.get('/product', getProduct);
 router.get('/product/:id', getProductbyId);
-router.patch('/product/:id', updateProduct);
-router.delete('/product/:id', deleteProduct);
+router.post('/product',auth, uploadImgProduct("image"), addProduct);
+router.patch('/product/:id',auth, updateProduct);
+router.delete('/product/:id',auth, deleteProduct);
 
 // Router Category
 router.get('/category', getCategory);
-router.post('/category', addCategory);
 router.get('/category/:id', getCategorybyId);
-router.patch('/category/:id', updateCategory);
-router.delete('/category/:id', deleteCategory);
+router.post('/category',auth, addCategory);
+router.patch('/category/:id',auth, updateCategory);
+router.delete('/category/:id',auth, deleteCategory);
 
 // Router Profile
 router.get('/profile', getProfile);
-router.post('/profile', auth, uploadImgProfile("image"), addProfile);
 router.get('/profile/:id', getProfilebyId);
-router.patch('/profile/:id', updateProfile);
-router.delete('/profile/:id', deleteProfile);
+router.post('/profile',auth, auth, uploadImgProfile("image"), addProfile);
+router.patch('/profile/:id',auth, updateProfile);
+router.delete('/profile/:id',auth, deleteProfile);
 
 // Router Transaction
 router.get('/transaction', getTransaction);
-router.post('/transaction', addTransaction);
 router.get('/transaction/:id', getTransactionbyId);
-router.patch('/transaction/:id', updateTransaction);
-router.delete('/transaction/:id', deleteTransaction);
+router.post('/transaction',auth, addTransaction);
+router.patch('/transaction/:id',auth, updateTransaction);
+router.delete('/transaction/:id',auth, deleteTransaction);
 
 
 
