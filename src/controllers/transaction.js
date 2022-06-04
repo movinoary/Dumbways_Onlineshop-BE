@@ -18,7 +18,6 @@ exports.addTransaction = async (req, res) => {
 };
 
 exports.getTransaction = async (req, res) => {
-    // code here
     try {
         const data = await transaction.findAll({
             include: [

@@ -6,9 +6,10 @@ POST http://localhost:5000/api/v1/register
 Content-Type: application/json
 
 {
-    "name" : "",
-    "email" : "",
-    "password" : "",
+    "name" : "admin",
+    "email" : "admin@gmail.com",
+    "password" : "123qwe",
+    "status" : "admin"
 }
 
 ###
