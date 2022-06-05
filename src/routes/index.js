@@ -73,7 +73,7 @@ router.delete("/category/:id", auth, deleteCategory);
 // Router Profile
 router.get("/profile", getProfile);
 router.get("/profile/:id", getProfilebyId);
-router.post("/profile", auth, auth, uploadImgProduct("image"), addProfile);
+router.post("/profile", auth, auth, uploadImgProfile("image"), addProfile);
 router.patch("/profile/:id", auth, updateProfile);
 router.delete("/profile/:id", auth, deleteProfile);
 

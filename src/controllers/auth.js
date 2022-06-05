@@ -94,8 +94,8 @@ exports.login = async (req, res) => {
       id: userExist.id,
     };
 
-    const SECRET_KEY = "sangatrahasia";
-    const token = jwt.sign(dataToken, SECRET_KEY);
+    // const SECRET_KEY = "sangatrahasia";
+    const token = jwt.sign(dataToken, process.env.TOKEN_KEY);
 
     res.status(200).send({
       status: "success...",
