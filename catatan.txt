@@ -3,8 +3,10 @@ npx sequelize init
 // buat bikin model di code
 npx sequelize-cli model:generate --name user --attributes name:string,email:String,password:String,status:string
 
+npx sequelize-cli model:generate --name chats --attributes message:text,idSender:integer,idSender:integer
+
 // buat bikin database
 npx sequelize db:migrate
 
-// buat ngapus
+// buat ngapus semua
 npx sequelize db:migrate:undo:all
